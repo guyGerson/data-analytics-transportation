@@ -70,9 +70,9 @@ stages:
       export password=${output:1:${#output}-3}
       output=`cf env ${CF_APP} | grep userId -m 1 | awk '{print $2}'`
       export username=${output:1:${#output}-3}
-      output=`cf env data-analytics-transportation-guyger-1319 | grep password  | awk 'NR == 3' |  awk '{print $2}'`
+      output=`cf env ${CF_APP} | grep password  | awk 'NR == 3' |  awk '{print $2}'`
       export msghubPassword=${output:1:${#output}-3}
-      output=`cf env data-analytics-transportation-guyger-1319 | grep -w user -m 1 |  awk '{print $2}'`
+      output=`cf env ${CF_APP} | grep -w user -m 1 |  awk '{print $2}'`
       export msghubUser=${output:1:${#output}-2}
   - name: Container Build
     type: builder
@@ -87,7 +87,7 @@ stages:
     COMMAND: "#!/bin/bash\n# The following colors have been defined to help with presentation\
       \ of logs: green, red, label_color, no_color.  \n\necho \"swift.tenant=${tenant}\"\
       \ >> ${WORKSPACE}/secor/DataServices/SECOR_INSTALL_DIR/secor.common.properties\n
-      \ echo \"KafkaClient { \n     com.ibm.messagehub.login.MessageHubLoginModule required \n     serviceName=\"kafka\" \n     username=\"${msghubUser}\" \n     password=\"${msghubPassword}\"; \n };\"\
+      \ echo \"KafkaClient { \n     com.ibm.messagehub.login.MessageHubLoginModule required \n     serviceName="kafka" \n     username="${msghubUser}" \n     password="${msghubPassword}"; \n };\"\
       \ > ${WORKSPACE}/secor/DataServices/SECOR_INSTALL_DIR/jaas.conf\n\
       \ echo \"swift.username=${username}\"\
       \ >> ${WORKSPACE}/secor/DataServices/SECOR_INSTALL_DIR/secor.common.properties\necho \"swift.password=${password}\"\
